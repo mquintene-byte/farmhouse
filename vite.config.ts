@@ -9,7 +9,10 @@ import { nitroV2Plugin } from '@tanstack/nitro-v2-vite-plugin'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    nitroV2Plugin(),
+    // Only enable the nitro SSR plugin when explicitly requested. This avoids
+    // Vite attempting an SSR build with an HTML entry by default.
+    // Set ENABLE_NITRO=true in the environment to enable it.
+    ...(process.env.ENABLE_NITRO === 'true' ? [nitroV2Plugin()] : []),
     TanStackRouterVite({ autoCodeSplitting: true }),
     viteReact(),
     tailwindcss(),
