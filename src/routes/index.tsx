@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button'
 import { Card } from '../components/ui/card'
 import { Avatar, AvatarImage } from '../components/ui/avatar'
 import { Separator } from '../components/ui/separator'
-import { LucideGithub, LucideMail, LucidePhone, LucideMapPin, LucideYoutube, PlayCircle, Menu, X, Package, GitMerge, BookOpen } from 'lucide-react'
+import { LucideGithub, LucideMail, LucidePhone, LucideMapPin, PlayCircle, Menu, X, Package, GitMerge, BookOpen } from 'lucide-react'
 import { Dialog, DialogTrigger, DialogContent } from '../components/ui/dialog'
 import Calculators from '../components/calculators/Calculators'
 
