@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button'
 import { Card } from '../components/ui/card'
 import { Avatar, AvatarImage } from '../components/ui/avatar'
 import { Separator } from '../components/ui/separator'
-import { LucideGithub, LucideMail, LucidePhone, LucideMapPin, LucideYoutube, PlayCircle, Menu, X } from 'lucide-react'
+import { LucideGithub, LucideMail, LucidePhone, LucideMapPin, LucideYoutube, PlayCircle, Menu, X, Package, GitMerge, BookOpen } from 'lucide-react'
 import { Dialog, DialogTrigger, DialogContent } from '../components/ui/dialog'
 import Calculators from '../components/calculators/Calculators'
 
@@ -222,7 +222,9 @@ export default function RouteComponent() {
             <Card key={s.title} className="p-6">
               <div className="flex items-start gap-4">
                 <div className="rounded-full bg-emerald-100 p-3">
-                  <LucideGithub className="w-6 h-6 text-emerald-700" />
+                  {s.icon === 'package' && <Package className="w-6 h-6 text-emerald-700" />}
+                  {s.icon === 'git-merge' && <GitMerge className="w-6 h-6 text-emerald-700" />}
+                  {s.icon === 'book-open' && <BookOpen className="w-6 h-6 text-emerald-700" />}
                 </div>
                 <div>
                   <h3 className="font-semibold">{s.title}</h3>
@@ -295,10 +297,10 @@ export default function RouteComponent() {
 
           <Card className="p-6 flex items-center justify-center">
             <div className="text-center">
-              <div className="font-semibold">QR / Contact page</div>
-              <a className="mt-2 inline-flex items-center gap-2 text-sm text-emerald-700" href={contact.qr}>
-                <LucideYoutube className="w-4 h-4" /> Visit contact page
-              </a>
+              <div className="font-semibold">qr code</div>
+              <div className="mt-3">
+                <img src="/qr.png" alt="QR code" className="mx-auto w-40 h-40 object-contain" />
+              </div>
             </div>
           </Card>
         </div>
