@@ -1,12 +1,15 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { ClerkProvider } from '@clerk/clerk-react'
+import { Toaster } from 'react-hot-toast'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
+
 
 // Create a new router instance
 const router = createRouter({
@@ -25,13 +28,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+
+// Import your Publishable Key
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Missing Publishable Key')
+}
+
 // Render the app
 const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+         <RouterProvider router={router} />
+         <Toaster position="top-right" />
+      </ClerkProvider>
     </StrictMode>,
   )
 }

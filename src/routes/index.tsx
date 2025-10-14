@@ -1,12 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ReactPlayer from 'react-player'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '../components/ui/button'
 import { Card } from '../components/ui/card'
 import { Avatar, AvatarImage } from '../components/ui/avatar'
 import { Separator } from '../components/ui/separator'
 import { LucideGithub, LucideMail, LucidePhone, LucideMapPin, PlayCircle, Menu, X, Package, GitMerge, BookOpen } from 'lucide-react'
 import { Dialog, DialogTrigger, DialogContent } from '../components/ui/dialog'
+import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton, useUser } from '@clerk/clerk-react'
+import toast from 'react-hot-toast'
 import Calculators from '../components/calculators/Calculators'
 
 // alias to avoid strict react-player prop typings in this project
@@ -134,8 +136,34 @@ export default function RouteComponent() {
     if (!el) return
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
+  const { user } = useUser()
+  const welcomed = useRef(false)
+
+  useEffect(() => {
+    if (!user) return
+    if (welcomed.current) return
+    welcomed.current = true
+    const name = user.firstName ?? user.fullName ?? 'there'
+    toast.success(`Welcome, ${name}!`)
+  }, [user])
   return (
     <main className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-amber-50 text-slate-900 inter-light">
+      {/* Top-most global sticky banner for signed-out users (full-width, outside header) */}
+      <SignedOut>
+        <div role="alert" className="sticky top-0 z-50 w-full bg-amber-50 border-b border-amber-200">
+          <div className="max-w-screen-xl mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="text-amber-800 font-semibold">Sign in required</div>
+              <div className="text-amber-700 text-sm">Please sign in to access the calculators and tools.</div>
+            </div>
+            <div>
+              <SignInButton mode="modal">
+                <Button variant="destructive" size="sm">Sign in</Button>
+              </SignInButton>
+            </div>
+          </div>
+        </div>
+      </SignedOut>
       <header className="relative container mx-auto px-6 py-8 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="text-2xl font-extrabold">{siteData.title}</div>
@@ -147,10 +175,29 @@ export default function RouteComponent() {
           <button className="text-sm hover:underline" onClick={() => smoothScroll(calculatorsRef.current)}>Calculators</button>
           <button className="text-sm hover:underline" onClick={() => smoothScroll(teamRef.current)}>Our Team</button>
           <button className="text-sm hover:underline" onClick={() => smoothScroll(contactRef.current)}>Contact</button>
+
+          <SignedIn>
+            <div className="ml-4 flex items-center gap-3">
+              <UserButton afterSignOutUrl="/" />
+              <SignOutButton>
+                <button className="text-sm text-slate-700 hover:underline">Sign out</button>
+              </SignOutButton>
+            </div>
+          </SignedIn>
+
+          {/* SignedOut: sign-in CTA is provided by the top banner; no button here */}
         </nav>
 
         {/* Mobile menu button */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-3">
+          {/* Mobile auth controls (inline) */}
+          <SignedIn>
+            <div className="flex items-center">
+              <UserButton />
+            </div>
+          </SignedIn>
+          {/* SignedOut: top banner provides sign-in CTA on small screens as well */}
+
           <MobileMenu onNavigate={(s) => {
             if (s === 'services') smoothScroll(servicesRef.current)
             if (s === 'calculators') smoothScroll(calculatorsRef.current)
@@ -158,6 +205,7 @@ export default function RouteComponent() {
             if (s === 'contact') smoothScroll(contactRef.current)
           }} />
         </div>
+        
       </header>
 
   <section className="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -242,7 +290,27 @@ export default function RouteComponent() {
       <h2 className="text-2xl font-bold">Calculators</h2>
       <p className="text-slate-600 mt-2">Small tools to help with planning and estimates.</p>
       <div className="mt-6">
-        <Calculators />
+        <SignedIn>
+          <Calculators />
+        </SignedIn>
+
+        <SignedOut>
+          <div className="mb-4 rounded-md bg-amber-50 border border-amber-200 px-4 py-3">
+            <div className="text-sm text-amber-800 font-semibold">Sign in required</div>
+            <div className="text-sm text-amber-700">Please sign in to access the calculators and tools.</div>
+          </div>
+          <Card className="p-6">
+            <h3 className="font-semibold">Calculators — Sign in required</h3>
+            <p className="text-sm text-slate-600 mt-2">
+              Please sign in to use the calculators.
+            </p>
+            <div className="mt-4">
+              <SignInButton mode="modal">
+                <Button>Sign in to unlock</Button>
+              </SignInButton>
+            </div>
+          </Card>
+        </SignedOut>
       </div>
     </section>
 

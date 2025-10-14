@@ -4,6 +4,10 @@ dist
 dist-ssr
 *.local
 count.txt
-.env
+**/.env
 .nitro
 .tanstack
+.DS_Store
+dist
+dist-ssr
+*.local
