@@ -135,12 +135,3 @@ The project includes a set of small agricultural calculators useful for farm pla
 
 Example UI implementations typically include small form sections for each calculator and display the computed result immediately after validation. If you'd like, I can add React components and unit tests for all six calculators in `src/components` and wire them into the landing page.
 
-## Contact & license
-
-Update contact information and license as appropriate for your project.
-
----
-
-If you want, I can also:
-- Add a short developer checklist at the top of this README (e.g., environment setup, common commands).
-- Add scripts to `package.json` for `serve` (preview) or more explicit test/lint commands.
